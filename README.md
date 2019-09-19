@@ -1,2 +1,2 @@
-# lunar-lander
-Solving the lunar lander problem with RL methods
+# Lunar Lander
+Methods for solving continuous state and discrete action space reinforcement learning problem
