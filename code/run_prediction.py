@@ -9,10 +9,11 @@ import seaborn as sns
 from modeling.random_action import random_action
 from modeling.one_step_sarsa import one_step_sarsa_predict
 from modeling.one_step_sarsa_discrete import one_step_sarsa_discr_predict
+from modeling.dqn import dqn_predict
 
 N_EPISODES = 100
 
-MODEL = 2  # 0 - random; 1 - one-step SARSA; 2 - discrete-state SARSA
+MODEL = 3  # 0 - random; 1 - one-step SARSA; 2 - discrete-state SARSA; 3 - DQN
 
 RENDER = True
 PLOT = True
@@ -80,6 +81,9 @@ def _get_predict_function():
     elif MODEL == 2:
         print('1-Step Discrete-State SARSA model selected.')
         return one_step_sarsa_discr_predict
+    elif MODEL == 3:
+        print('DQN model selected.')
+        return dqn_predict
     else:
         raise ValueError('Invalid Model ID.')
 

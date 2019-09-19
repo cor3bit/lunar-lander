@@ -6,36 +6,40 @@ import gym
 from modeling.random_action import random_action
 from modeling.one_step_sarsa import one_step_sarsa_learn
 from modeling.one_step_sarsa_discrete import one_step_sarsa_discr_learn
+from modeling.dqn import dqn_learn
 
-N_EPISODES = 20000
-
-MODEL = 2  # 0 - random; 1 - one-step SARSA; 2 - discrete-state SARSA
-
-MODEL_PARAMS = {
-    0: {},
-    1: {
-        'gamma': 0.9,
-
-        'alpha': 0.1,
-        'epsilon': 1.0,
-        'eps_decay': 0.98,
-
-        'fa_type': 'linear',
-    },
-    2: {
-        'gamma': 0.95,
-
-        'alpha': 0.2,
-        'epsilon': 1.0,
-        'eps_decay': 0.98,
-    }
-}
-
-SEED = 1
+MODEL = 0  # 0 - random; 1 - one-step SARSA; 2 - discrete-state SARSA; 3 - DQN
 
 VERBOSE = False
 RENDER = False
 SAVE_MODEL = True
+
+MODEL_PARAMS = {
+    0: {
+        'n_episodes': 1000,
+    },
+    1: {
+        'n_episodes': 20000,
+        'gamma': 0.9,
+        'alpha': 0.1,
+        'epsilon': 1.0,
+        'eps_decay': 0.98,
+        'fa_type': 'linear',
+    },
+    2: {
+        'n_episodes': 20000,
+        'gamma': 0.95,
+        'alpha': 0.2,
+        'epsilon': 1.0,
+        'eps_decay': 0.98,
+    },
+    3: {
+        'n_episodes': 1e6,
+        'alpha': 1e-4,
+    }
+}
+
+SEED = 1
 
 
 def learn_to_fly():
@@ -52,12 +56,10 @@ def learn_to_fly():
     learn_func = _get_learn_function()
 
     print('Running learning.')
+    n_episodes = MODEL_PARAMS[MODEL]['n_episodes']
 
     rewards = learn_func(
         env,
-
-        # run params
-        n_episodes=N_EPISODES,
 
         # logging
         verbose=VERBOSE,
@@ -68,7 +70,7 @@ def learn_to_fly():
         **MODEL_PARAMS[MODEL],
     )
 
-    print(f'\nTraining finished on total of {N_EPISODES} episodes.')
+    print(f'\nTraining finished on total of {n_episodes} episodes.')
     print(f'Average Reward is {np.mean(np.array(rewards))}.')
     print(f'Last MA-100 Reward is {np.mean(np.array(rewards[-100:]))}.')
 
@@ -85,6 +87,9 @@ def _get_learn_function():
     elif MODEL == 2:
         print('1-Step Discrete-State SARSA model selected.')
         return one_step_sarsa_discr_learn
+    elif MODEL == 3:
+        print('DQN model selected.')
+        return dqn_learn
     else:
         raise ValueError('Invalid Model ID.')
 
