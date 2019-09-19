@@ -12,7 +12,7 @@ from modeling.one_step_sarsa_discrete import one_step_sarsa_discr_predict
 
 N_EPISODES = 100
 
-MODEL = 0  # 0 - random; 1 - one-step SARSA; 2 - discrete-state SARSA
+MODEL = 2  # 0 - random; 1 - one-step SARSA; 2 - discrete-state SARSA
 
 RENDER = True
 PLOT = True
